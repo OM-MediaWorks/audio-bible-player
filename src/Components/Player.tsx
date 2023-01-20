@@ -13,6 +13,7 @@ export function Player ({ meta }: { meta: AudioBible }) {
   const canvas = createRef<HTMLCanvasElement>()
 
   const togglePlaying = (audioPlayer: HTMLAudioElement) => {
+    console.log('woops')
     audioPlayer.paused ? audioPlayer.play() : audioPlayer.pause()
 
     if (!started) {
