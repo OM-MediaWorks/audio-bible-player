@@ -2,10 +2,6 @@ import { createRef, useState, useEffect } from 'react'
 import { AudioBible } from '../types'
 import '../style.scss'
 
-const togglePlaying = (audioPlayer: HTMLAudioElement) => {
-  audioPlayer.paused ? audioPlayer.play() : audioPlayer.pause()
-}
-
 export function Player ({ meta }: { meta: AudioBible }) {
 
   const [activeBook, setActiveBook] = useState(meta.books[0])
@@ -13,63 +9,73 @@ export function Player ({ meta }: { meta: AudioBible }) {
   const [expanded, setExpanded] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const audioPlayer = createRef<HTMLAudioElement>()
+  const [started, setStarted] = useState(false)
   const canvas = createRef<HTMLCanvasElement>()
 
-  useEffect(() => {
-    const audio = audioPlayer.current
+  const togglePlaying = (audioPlayer: HTMLAudioElement) => {
+    audioPlayer.paused ? audioPlayer.play() : audioPlayer.pause()
 
-    if (audio) {
-      audio.addEventListener('play', () => {
-        setIsPlaying(true)
-      })
-
-      audio.addEventListener('pause', () => {
-        setIsPlaying(false)
-      })
-
-      const context = new AudioContext()
-      const src = context.createMediaElementSource(audio)
-      const analyser = context.createAnalyser()
-      const ctx = canvas.current!.getContext("2d")!
-
-      src.connect(analyser)
-      analyser.connect(context.destination)
+    if (!started) {
+      if (audioPlayer) {
+        audioPlayer.addEventListener('play', () => {
+          setIsPlaying(true)
+        })
   
-      analyser.fftSize = 256
+        audioPlayer.addEventListener('pause', () => {
+          setIsPlaying(false)
+        })
   
-      const bufferLength = analyser.frequencyBinCount
+        const context = new AudioContext()
+        const src = context.createMediaElementSource(audioPlayer)
+        const analyser = context.createAnalyser()
+        const ctx = canvas.current!.getContext("2d")!
   
-      const dataArray = new Uint8Array(bufferLength)
-
-      var WIDTH = canvas.current!.width;
-      var HEIGHT = canvas.current!.height;
+        src.connect(analyser)
+        analyser.connect(context.destination)
+    
+        analyser.fftSize = 256
+    
+        const bufferLength = analyser.frequencyBinCount
+    
+        const dataArray = new Uint8Array(bufferLength)
   
-      var barWidth = (WIDTH / bufferLength) * 2.5;
-      var barHeight;
-      var x = 0;
-
- 
-      function renderFrame() {
-        requestAnimationFrame(renderFrame);
+        var WIDTH = canvas.current!.width;
+        var HEIGHT = canvas.current!.height;
+    
+        var barWidth = (WIDTH / bufferLength) * 2.5;
+        var barHeight;
+        var x = 0;
   
-        x = 0;
-  
-        analyser.getByteFrequencyData(dataArray);
-  
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
-  
-        for (var i = 0; i < bufferLength; i++) {
-          barHeight = dataArray[i];
-            ctx.fillStyle = "rgb(33, 139, 180)";
-          ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
-  
-          x += barWidth + 1;
+   
+        function renderFrame() {
+          requestAnimationFrame(renderFrame);
+    
+          x = 0;
+    
+          analyser.getByteFrequencyData(dataArray);
+    
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    
+          for (var i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
+              ctx.fillStyle = "rgb(33, 139, 180)";
+            ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+    
+            x += barWidth + 1;
+          }
         }
-      }
 
-      renderFrame()
+        console.log('test')
+  
+        renderFrame()
+        setStarted(true)
+      }
     }
+  }
+
+  useEffect(() => {
+
   }, [])
 
   return (
