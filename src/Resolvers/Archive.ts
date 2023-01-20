@@ -58,6 +58,7 @@ export class Archive implements ResolverInterface {
         return {
             label,
             id,
+            link: `https://archive.org/details/${this.#input.substring(8)}`,
             books: [...books.values()].map((book: Book) => {
                 return {
                     label: book.name,

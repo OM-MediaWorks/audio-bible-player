@@ -11,6 +11,7 @@ export type Book = {
 
 export type AudioBible = {
     id: string,
+    link: string,
     label: string,
     books: Array<Book>
 }

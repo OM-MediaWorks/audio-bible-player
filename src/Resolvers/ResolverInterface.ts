@@ -4,4 +4,5 @@ export interface ResolverInterface {
     applies (): Promise<Boolean> | Boolean
 
     getMeta(): Promise<AudioBible>
+
 }
