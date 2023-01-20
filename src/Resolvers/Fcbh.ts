@@ -44,8 +44,6 @@ export class Fcbh implements ResolverInterface {
         const bibleData = await bibleResponse.json()
         const bookIds: Set<string> = new Set(chaptersData.data.map((chapter: fcbhChapter) => chapter.book_id))
 
-        console.log(chaptersData)
-
         return {
             label: bibleData.data.name,
             id: bibleData.data.abbr,

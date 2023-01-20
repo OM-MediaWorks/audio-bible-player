@@ -27,8 +27,6 @@ export function Player ({ meta }: { meta: AudioBible }) {
         setIsPlaying(false)
       })
 
-      console.log('test')
-
       const context = new AudioContext()
       const src = context.createMediaElementSource(audio)
       const analyser = context.createAnalyser()
@@ -90,7 +88,7 @@ export function Player ({ meta }: { meta: AudioBible }) {
             <canvas width='100px' height='100px' ref={canvas} className='waves'></canvas>
           </button>
 
-          <audio crossOrigin='anonymous' ref={audioPlayer} autoPlay controls src={`https://cors.deno.dev/${activeChapter.file}`}></audio>
+          <audio crossOrigin='anonymous' ref={audioPlayer} controls src={`https://cors.deno.dev/${activeChapter.file}`}></audio>
         </div>
       ) : null}
 
