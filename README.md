@@ -5,3 +5,9 @@ An Open Source Audio Bible Player. It supports data from Faith Comes by Hearing 
 The widget itself is a web component.
 
 ## Work in progress.
+
+# Local development
+
+- Install NodeJS
+- run `npm install`
+- run `npm run dev`
